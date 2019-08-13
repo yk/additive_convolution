@@ -2,7 +2,7 @@
 
 import numpy as np
 
-def batch_add_conv_1d(x, k, reduction_fn=np.max):
+def batch_add_conv_1d(x, k, reduction_fn=np.max, pad_element=-np.inf):
     """Performs additive batch convolution with a 1D kernel.
 
     Args:
@@ -17,7 +17,7 @@ def batch_add_conv_1d(x, k, reduction_fn=np.max):
     pad_size = k.size // 2
     pad_axes = np.zeros((len(xpk.shape), 2), dtype=np.int)
     pad_axes[-1, :] = pad_size
-    xpk_pad = np.pad(xpk, pad_axes, mode='constant')
+    xpk_pad = np.pad(xpk, pad_axes, mode='constant', constant_values=pad_element)
     xpk_shifted = np.lib.stride_tricks.as_strided(
         xpk_pad, 
         shape=xpk.shape, 
